@@ -73,16 +73,6 @@ export default function GamesDashboard() {
           <h1 className="text-4xl font-extrabold sm:text-5xl text-gradient pb-2">
             Available Games
           </h1>
-          <p
-            className="max-w-2xl text-lg"
-            style={{ color: "var(--color-text-muted)" }}
-          >
-            Browse the full catalogue returned by the{" "}
-            <span className="font-mono text-sm px-2 py-1 rounded bg-black/30 text-white shadow-inner">
-              /games
-            </span>{" "}
-            endpoint.
-          </p>
         </div>
 
         {/* Content Section */}
