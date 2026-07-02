@@ -1,4 +1,56 @@
 @import "tailwindcss";
-@plugin "daisyui";
 
+:root {
+  /* Global Color Palette - Gaming Dark Theme */
+  --color-bg-main: #0f172a;      /* Slate 900 */
+  --color-card-bg: #1e293b;      /* Slate 800 */
+  --color-card-border: #334155;  /* Slate 700 */
+  
+  --color-primary: #8b5cf6;      /* Violet 500 */
+  --color-primary-glow: rgba(139, 92, 246, 0.25);
+  --color-accent: #10b981;       /* Emerald 500 */
+  
+  --color-text-main: #f8fafc;    /* Slate 50 */
+  --color-text-muted: #94a3b8;   /* Slate 400 */
+  
+  --color-error-bg: #7f1d1d;     /* Red 900 */
+  --color-error-text: #fca5a5;   /* Red 300 */
+}
 
+@layer components {
+  /* Reusable structural classes */
+  .theme-bg {
+    background-color: var(--color-bg-main);
+    color: var(--color-text-main);
+  }
+
+  .text-gradient {
+    background: linear-gradient(to right, var(--color-primary), #d946ef);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .theme-card {
+    background-color: var(--color-card-bg);
+    border: 1px solid var(--color-card-border);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Interactive hover effects for cards */
+  .theme-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-primary);
+    box-shadow: 0 10px 30px -10px var(--color-primary-glow);
+  }
+
+  .theme-badge {
+    background-color: var(--color-primary-glow);
+    color: #c4b5fd; /* Violet 300 */
+    border: 1px solid var(--color-primary);
+  }
+
+  .theme-stat-box {
+    background-color: rgba(15, 23, 42, 0.5);
+    border: 1px solid var(--color-card-border);
+  }
+}

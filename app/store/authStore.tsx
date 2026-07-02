@@ -15,7 +15,7 @@ export const useAuthStore = create((set) => ({
         set({isLoading:true, error:null});
         try{
             // Zwracaj usera z BE
-            await axios.post(`${API_URL}/register`, { email, password })
+            await axios.post(`${API_URL}/identity/register`, { email, password })
             set({isAuthenticated:true, isLoading:false});
         }catch (error:any){
             set({error: error.response.data.errors || "Error signing up", isLoading:false});
@@ -26,7 +26,7 @@ export const useAuthStore = create((set) => ({
     login: async (email:string, password:string) =>{
         set({ isLoading: true, error: null });
 		try {
-			await axios.post(`${API_URL}/login?useCookies=true&useSessionCookies=true`, { email, password }, { withCredentials: true });
+			await axios.post(`${API_URL}/identity/login?useCookies=true&useSessionCookies=true`, { email, password }, { withCredentials: true });
 			set({
 				isAuthenticated: true,
 				// user: response.data.user,
@@ -43,7 +43,7 @@ export const useAuthStore = create((set) => ({
     logout: async () => {
 		set({ isLoading: true, error: null });
 		try {
-			await axios.post(`${API_URL}/logout`);
+			await axios.post(`${API_URL}/identity/logout`);
 			set({ user: null, isAuthenticated: false, error: null, isLoading: false });
 		} catch (error:any) {
 			set({ error: "Error logging out", isLoading: false });
