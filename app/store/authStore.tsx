@@ -3,21 +3,18 @@ import axios from "axios";
 
 const API_URL = 'http://localhost:5001';
 
-// 1. Define exactly what lives in your store
 interface AuthState {
-    user: any | null; // You can replace 'any' with a strict User type later!
+    user: { email: string } | null; // Typed it slightly better than 'any' for you
     isAuthenticated: boolean;
     error: string | null;
     isLoading: boolean;
     isCheckingAuth: boolean;
     
-    // Define your functions
     signup: (email: string, password: string) => Promise<void>;
     login: (email: string, password: string) => Promise<void>;
     logout: () => void; 
 }
 
-// 2. Pass the <AuthState> interface to the create function
 export const useAuthStore = create<AuthState>((set) => ({
     user: null,
     isAuthenticated: false,
@@ -29,7 +26,14 @@ export const useAuthStore = create<AuthState>((set) => ({
         set({ isLoading: true, error: null });
         try {
             await axios.post(`${API_URL}/identity/register`, { email, password });
-            set({ isAuthenticated: true, isLoading: false });
+            
+            // Optional: If you want auto-login on signup, set the user here too.
+            // If they need to log in separately after signup, leave user: null.
+            set({ 
+                user: { email }, // Update user here if auto-logging in
+                isAuthenticated: true, 
+                isLoading: false 
+            });
         } catch (error: any) {
             set({ error: error.response?.data?.errors || "Error signing up", isLoading: false });
             throw error;
@@ -39,8 +43,10 @@ export const useAuthStore = create<AuthState>((set) => ({
     login: async (email: string, password: string) => {
         set({ isLoading: true, error: null });
         try {
-            await axios.post(`${API_URL}/identity/login?useCookies=true&useSessionCookies=true`, { email, password }, { withCredentials: true });
+            const response = await axios.post(`${API_URL}/identity/login?useCookies=true&useSessionCookies=true`, { email, password }, { withCredentials: true });
+            
             set({
+                user: { email }, // <--- THE FIX: We must update the user object!
                 isAuthenticated: true,
                 error: null,
                 isLoading: false,
@@ -53,7 +59,6 @@ export const useAuthStore = create<AuthState>((set) => ({
     },
     
     logout: () => {
-        // Soft logout: just wipe the frontend state instantly
         set({ 
             user: null, 
             isAuthenticated: false, 
