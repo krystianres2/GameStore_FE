@@ -5,23 +5,20 @@ import Input from "@/app/components/Input";
 import { Mail, Lock, Loader } from "lucide-react";
 import Link from "next/link";
 import { useAuthStore } from "@/app/store/authStore";
-import { useRouter } from "next/navigation"; // 1. Import useRouter
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login, error, isLoading } = useAuthStore();
-  const router = useRouter(); // 2. Initialize router
+  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // 3. Await login and redirect on success
       await login(email, password);
       router.push("/games"); 
     } catch (err) {
-      // The error is already caught and set in the Zustand store, 
-      // so we just catch it here to prevent unhandled promise rejections.
       console.error("Login failed");
     }
   };
@@ -54,13 +51,7 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            
-            <div className="flex items-center mb-6">
-              <Link href={"/forgot-password"} className="text-sm text-green-400 hover:underline">
-                Forgot your password?
-              </Link>
-            </div>
-            
+           
             {error && <p className="text-red-500 font-semibold mt-2 mb-4">{error}</p>}
             
             <button
@@ -68,7 +59,6 @@ export default function Login() {
               type="submit"
               disabled={isLoading}
             >
-              {/* 4. Fixed button text rendering */}
               {isLoading ? (
                 <Loader className="animate-spin" size={24} />
               ) : (
@@ -76,6 +66,16 @@ export default function Login() {
               )}
             </button>
           </form>
+        </div>
+
+        {/* --- NEW: Register Link Footer --- */}
+        <div className="px-8 py-4 bg-gray-900 bg-opacity-50 flex justify-center">
+          <p className="text-sm text-gray-400">
+            Don&apos;t have an account?{" "}
+            <Link href="/register" className="text-green-400 hover:underline font-medium">
+              Sign up
+            </Link>
+          </p>
         </div>
       </div>
     </div>
